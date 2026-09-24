@@ -2,7 +2,7 @@
 
 Projeto de análise de churn desenvolvido como portfólio para estágio em dados. A base utilizada é o dataset público **IBM Telco Customer Churn** (Kaggle), com 7.043 clientes e 21 colunas cobrindo perfil, serviços contratados, tipo de contrato, forma de pagamento e status de cancelamento.
 
-O projeto cobre o fluxo de preparação, análise e visualização dos dados, utilizando **Python/Pandas** no tratamento e transformação, **Databricks** como ambiente de armazenamento e análise **SQL** e **Power BI** para visualização dos resultados.
+O projeto cobre o fluxo de preparação, análise e visualização dos dados, utilizando **Python/Pandas** no tratamento e transformação, **Databricks** para armazenamento em Delta Tables e execução das análises SQL, e **Power BI** para visualização dos resultados.
 
 O objetivo é responder perguntas de negócio relacionadas ao cancelamento de clientes, identificando padrões de churn, segmentos de maior risco e possíveis oportunidades de retenção.
 
@@ -51,9 +51,9 @@ O objetivo é responder perguntas de negócio relacionadas ao cancelamento de cl
 ## Principais achados
 
 | Achado | Impacto |
-|--------|---------|
+|---|---|
 | Clientes com até 6 meses de permanência apresentam taxa de churn próxima de 47%, a maior entre os períodos analisados | Alto |
-| Clientes com contrato mensal apresentam taxa de churn de 42% vs 3% em contratos de 2 anos | Alto |
+| Clientes com contrato mensal apresentam taxa de churn de 42%, contra 3% em contratos de 2 anos | Alto |
 | Clientes que utilizam Electronic check apresentam taxa de churn de 45% | Médio |
 | Clientes idosos apresentam taxa de churn ~70% maior que não-idosos | Médio |
 | $139K/mês em receita diretamente associada a clientes que cancelaram | Alto |
@@ -83,7 +83,7 @@ telco-churn-analytics/
 │   └── eda.ipynb                  # análise exploratória com 8 visualizações
 ├── powerbi/                       # dashboard .pbix e print do resultado
 ├── sql/
-│   └── business_questions.sql     # queries de referência executadas localmente
+│   └── business_questions.sql     # versão local das queries analíticas
 ├── src/
 │   ├── etl_telco_churn.py         # pipeline ETL completo
 │   ├── add_risk_score.py          # cria a coluna de heuristic churn risk score
@@ -97,6 +97,8 @@ telco-churn-analytics/
 
 ## Como executar
 
+O pipeline local em Python/SQLite é utilizado para reproduzir o tratamento e preparação dos dados. As análises SQL apresentadas no projeto são executadas no Databricks sobre Delta Tables.
+
 ### Pré-requisitos
 
 ```bash
@@ -106,7 +108,7 @@ pip install pandas matplotlib seaborn jupyter
 ### 1. Baixar o dataset
 
 Baixe o arquivo `WA_Fn-UseC_-Telco-Customer-Churn.csv` no Kaggle:
-[https://www.kaggle.com/datasets/blastchar/telco-customer-churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+[IBM Telco Customer Churn — Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
 
 Salve em `data/Telco_Customer_Churn.csv`.
 
@@ -154,16 +156,16 @@ Importe `databricks/churn_analytics.dbc` em um workspace Databricks e execute o 
 
 Como parte do estudo de ferramentas utilizadas em ambientes de Analytics, o dataset tratado pelo pipeline em Python foi disponibilizado no Databricks em Delta Tables. As 18 queries SQL utilizadas para responder às perguntas de negócio foram executadas diretamente no ambiente Databricks.
 
-O uso do Databricks neste projeto teve como objetivo praticar a plataforma, Delta Tables e execução de análises SQL em um ambiente cloud, aproximando o projeto de um fluxo utilizado em cenários profissionais de Analytics. O notebook .dbc pode ser importado diretamente em um workspace Databricks.
+O uso do Databricks neste projeto teve como objetivo praticar a plataforma, Delta Tables e execução de análises SQL em um ambiente cloud. O notebook `.dbc` pode ser importado diretamente em um workspace Databricks.
 
 ---
 
 ## Heuristic Churn Risk Score
 
-Segmenta clientes em três grupos de risco de churn com base em fatores de negócio identificados na EDA. Não é um modelo preditivo — é uma segmentação baseada em regras, o que a torna interpretável e acionável diretamente pelo time de negócio.
+Segmenta clientes em três grupos de risco de churn com base em fatores de negócio identificados na EDA. Não é um modelo preditivo — é uma segmentação baseada em regras, o que permite interpretar facilmente os fatores associados a cada nível de risco e utilizá-los como apoio à priorização de ações de retenção.
 
 | Fator | Peso |
-|-------|------|
+|---|---|
 | Contrato mensal | +1 |
 | Tenure menor que 12 meses | +1 |
 | Pagamento via Electronic check | +1 |
@@ -172,7 +174,7 @@ Segmenta clientes em três grupos de risco de churn com base em fatores de negó
 **Resultado:**
 
 | Categoria | Clientes | Taxa de churn |
-|-----------|----------|---------------|
+|---|---|---|
 | Alto risco (3-4 pontos) | 1.314 | 60,7% |
 | Médio risco (2 pontos) | 1.824 | 38,1% |
 | Baixo risco (0-1 pontos) | 3.905 | 9,6% |
@@ -187,7 +189,7 @@ Segmenta clientes em três grupos de risco de churn com base em fatores de negó
 
 3. **Investigar a relação entre Electronic check e churn** — clientes com esse método apresentam a maior taxa de evasão. Verificar se há atrito no processo de pagamento ou se é um indicador de perfil de menor engajamento.
 
-4. **Segmentação por risco para ações preventivas** — utilizar o heuristic churn risk score para priorizar clientes de alto risco em campanhas de retenção, antes que o cancelamento ocorra.
+4. **Segmentação por risco para ações preventivas** — utilizar o heuristic churn risk score como uma regra exploratória para priorizar clientes de maior risco em ações de retenção.
 
 ---
 
@@ -205,4 +207,4 @@ O dataset é fictício e representa um snapshot estático — não possui dados 
 
 ## Autor
 
-Desenvolvido por Vivian · [github.com/vivikari](https://github.com/vivikari)
+Desenvolvido por Vivian · [GitHub](https://github.com/vivikari)
