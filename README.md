@@ -169,4 +169,4 @@ Com base nos achados da análise:
 
 ## Autor
 
-Desenvolvido por **Kenga** como projeto de portfólio para estágio em dados.
+Desenvolvido por **Vivian** como projeto de portfólio para estágio em dados.
