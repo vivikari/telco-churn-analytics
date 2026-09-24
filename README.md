@@ -152,9 +152,9 @@ Importe `databricks/churn_analytics.dbc` em um workspace Databricks e execute o 
 
 ## Databricks
 
-O dataset tratado pelo pipeline em Python foi disponibilizado no Databricks em Delta Tables. As 18 queries SQL utilizadas para responder às perguntas de negócio foram executadas diretamente no ambiente Databricks, explorando agregações, segmentações e indicadores de churn.
+Como parte do estudo de ferramentas utilizadas em ambientes de Analytics, o dataset tratado pelo pipeline em Python foi disponibilizado no Databricks em Delta Tables. As 18 queries SQL utilizadas para responder às perguntas de negócio foram executadas diretamente no ambiente Databricks.
 
-O Databricks foi utilizado como ambiente de armazenamento e análise em cloud, permitindo trabalhar com Delta Tables e executar as queries analíticas diretamente sobre os dados tratados.
+O uso do Databricks neste projeto teve como objetivo praticar a plataforma, Delta Tables e execução de análises SQL em um ambiente cloud, aproximando o projeto de um fluxo utilizado em cenários profissionais de Analytics. O notebook .dbc pode ser importado diretamente em um workspace Databricks.
 
 ---
 
